@@ -1,0 +1,15 @@
+.retreat {
+    display: flex;
+    .container{
+        padding: 20px;
+    }
+    .retreatBx{
+        width: 100%;
+    }
+    .top {
+        width: 100%;
+        gap: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+}

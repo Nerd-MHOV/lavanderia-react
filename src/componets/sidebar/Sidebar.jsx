@@ -4,13 +4,23 @@ import {Link} from "react-router-dom";
 import {
     AssignmentTurnedIn, Checkroom,
     Dashboard, Engineering, Error,
-    Inventory, Logout, ShoppingBag, Tune,
+    Inventory, Logout, ShoppingBag, Tune, Menu
 } from "@mui/icons-material";
+import { useContext } from "react";
+import { SidebarContext } from "../../context/sidebarContext";
 
 const Sidebar = () => {
+
+    const { activeSidebar } = useContext(SidebarContext);
+    const { dispatch } = useContext(SidebarContext);
+    
+    const pathname = window.location.pathname
+
+
     return (
-        <div className="sidebar">
+        <div className={activeSidebar ? "sidebar active" : "sidebar"}>
                 <div className="navigation">
+                    <span className="btnMenu" onClick={() => dispatch({type:"TOGGLE"})}><Menu /></span>
                     <ul>
                         <li>
                             <Link to="/" className="link" >
@@ -20,14 +30,14 @@ const Sidebar = () => {
                                 <span className="title">Controle Lavanderia</span>
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/" className="link" >
+                        <li className={(pathname === "/painel") ? "hovered" : ""} >
+                            <Link to="/painel" className="link" >
                                 <span className="icon"><Dashboard /></span>
                                 <span className="title">Home</span>
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/" className="link" >
+                        <li className={(pathname === "/painel/retirar") ? "hovered" : ""} >
+                            <Link to="/painel/retirar" className="link" >
                                 <span className="icon"><ShoppingBag /></span>
                                 <span className="title">Retirar</span>
                             </Link>
