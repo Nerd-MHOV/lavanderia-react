@@ -8,7 +8,13 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    &:hover{
+    &.noHover {
+        box-shadow: none;
+        .title{
+            z-index: inherit;
+        }
+    }
+    &:hover:not(.noHover){
         background-color: var(--blue);
         .title, svg {
             color: var(--white);

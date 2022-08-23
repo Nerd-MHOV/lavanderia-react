@@ -1,8 +1,8 @@
 import "./login.scss"
 import Logo from "../../assets/images/GrupoperaltasCompleto.png"
 import {Link} from "react-router-dom";
-import Btn from "../../componets/btn/Btn";
-import Message from "../../componets/message/Message";
+import Btn from "../../components/btn/Btn";
+import Message from "../../components/message/Message";
 
 const Login = () => {
     return (

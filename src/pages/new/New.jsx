@@ -1,7 +1,7 @@
 import { DriveFolderUploadOutlined } from "@mui/icons-material"
 import { useState } from "react"
-import Navbar from "../../componets/navbar/Navbar"
-import Sidebar from "../../componets/sidebar/Sidebar"
+import Navbar from "../../components/navbar/Navbar"
+import Sidebar from "../../components/sidebar/Sidebar"
 import "./new.scss"
 
 const New = ({ input, title }) => {

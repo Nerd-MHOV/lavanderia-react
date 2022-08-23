@@ -3,7 +3,7 @@ import React from 'react'
 import Select from 'react-select'
 import { ArrowLeft, ArrowRight } from '@mui/icons-material'
 
-export const CardPainel = ({title, image, type}) => {
+export const CardPainel = ({title, image, type, noHover = false }) => {
 
     const options = [
         { value: '1', label: 'camareira'},
@@ -12,7 +12,7 @@ export const CardPainel = ({title, image, type}) => {
     ]
 
     return(
-        <div className="cardPainel">
+        <div className={noHover ? "cardPainel noHover" : "cardPainel"}>
             <div className="title">{title}</div>
             <div className="action">
                 {

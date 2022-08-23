@@ -1,8 +1,8 @@
 import "./single.scss"
-import Sidebar from "../../componets/sidebar/Sidebar"
-import Navbar from "../../componets/navbar/Navbar"
-import Chart from "../../componets/chart/Chart"
-import List from "../../componets/table/Table"
+import Sidebar from "../../components/sidebar/Sidebar"
+import Navbar from "../../components/navbar/Navbar"
+import Chart from "../../components/chart/Chart"
+import List from "../../components/table/Table"
 
 const Single = () => {
     return (
@@ -15,7 +15,8 @@ const Single = () => {
                         <div className="editButton">Edit</div>
                         <h1 className="title">Information</h1>
                         <div className="item">
-                            <img src="https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260" alt="" className="itemImg" />
+                            <img src="https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
+                                alt="" className="itemImg" />
                             <div className="details">
                                 <h1 className="itemTitle">Jane Doe</h1>
                                 <div className="detailItem">

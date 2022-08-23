@@ -1,8 +1,10 @@
 import "./retreat.scss";
-import Sidebar from "../../componets/sidebar/Sidebar"
-import Navbar from "../../componets/navbar/Navbar"
-import { CardPainel } from "../../componets/cardPainel/CardPainel";
+import Sidebar from "../../components/sidebar/Sidebar"
+import Navbar from "../../components/navbar/Navbar"
+import { CardPainel } from "../../components/cardPainel/CardPainel"
 import { Engineering, PersonSearch, PlaylistAddCircle } from "@mui/icons-material"
+import { TableRetreat } from "../../components/tableRetreat/TableRetreat"
+import Btn from "../../components/btn/Btn"
 
 
 const Retreat = () => {
@@ -19,7 +21,11 @@ const Retreat = () => {
                     </div>
                     <div className="bottom">
                         <div className="table">
-
+                            <CardPainel title="Responsavel" type="select" image={<PersonSearch />} noHover={true} />
+                            <TableRetreat />
+                            <div className="button">
+                                <Btn action={"Retirar"} color="dashboard" />
+                            </div>
                         </div>
                     </div>
                 </div>
