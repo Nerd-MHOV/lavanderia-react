@@ -13,7 +13,6 @@ const Sidebar = () => {
 
     const { activeSidebar } = useContext(SidebarContext);
     const { dispatch } = useContext(SidebarContext);
-    
     const pathname = window.location.pathname
 
 
@@ -42,8 +41,8 @@ const Sidebar = () => {
                                 <span className="title">Retirar</span>
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/" className="link" >
+                        <li className={(pathname === "/painel/devolver") ? "hovered" : ""} >
+                            <Link to="/painel/devolver" className="link" >
                                 <span className="icon"><AssignmentTurnedIn /></span>
                                 <span className="title">Devolver</span>
                             </Link>
