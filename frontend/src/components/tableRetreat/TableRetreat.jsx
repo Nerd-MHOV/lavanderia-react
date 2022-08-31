@@ -53,7 +53,7 @@ export const TableRetreat = () => {
                         <TableRow>
                             {
                                 headers.map((header) => (
-                                    <StyledTableCell key={header} align={header === "Obs" ? "center" : ""}>
+                                    <StyledTableCell key={header} align={header === "Obs" ? "center" : "left"}>
                                         {header}
                                     </StyledTableCell>
                                 ))

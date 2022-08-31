@@ -47,8 +47,8 @@ const Sidebar = () => {
                                 <span className="title">Devolver</span>
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/" className="link" >
+                        <li className={(pathname === "/painel/produto") ? "hovered" : ""}>
+                            <Link to="/painel/produto" className="link" >
                                 <span className="icon"><Checkroom /></span>
                                 <span className="title">Produto</span>
                             </Link>

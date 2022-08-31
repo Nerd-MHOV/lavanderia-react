@@ -27,17 +27,6 @@ const rowsHeader = [
             returnProduct: <Btn color="blue" action="Devolver"/>,
         },
     ]),
-    createData('Felipe Alberto', 'Monitoria', '15/08 14:00',[
-        {
-            id: 1,
-            dateRetreat: '15/08 13:40',
-            type:'calça',
-            product:'verde',
-            service:'Peraltas',
-            size: 'G',
-            returnProduct: <Btn color="blue" action="Devolver"/>,
-        },
-    ]),
     createData('Jean Rodrigues', 'Portaria', '15/08 14:00', [
         {
             id: 1,
