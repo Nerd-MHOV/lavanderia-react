@@ -1,11 +1,23 @@
 {
-  "name": "server",
+  "name": "backend-sys-laundry",
   "version": "1.0.0",
-  "description": "",
+  "description": "backend node of system laundry for control and management",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/server.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.19",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.4.1"
+  }
 }
