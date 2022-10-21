@@ -1,16 +1,17 @@
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
 } from "react-router-dom"
 import Login from "./pages/login/Login"
 import Home from "./pages/home/Home"
 import Retreat from "./pages/retreat/Retreat";
 import { ReturnProduct } from "./pages/ReturnProduct";
 import { ProductPage } from "./pages/ProductPage";
+import { PrivateRoute } from "./pages/PrivateRoute";
+
 
 function App() {
-
 
   return (
     <div className={"app"}>
@@ -19,11 +20,11 @@ function App() {
           <Route path="/">
             <Route index element={<Login />} />
             <Route path="painel" >
-              <Route index element={<Home />} />
-              <Route path="retirar" element={<Retreat />} />
-              <Route path="devolver" element={<ReturnProduct />} />
+              <Route index element={<PrivateRoute><Home /></PrivateRoute>} />
+              <Route path="retirar" element={<PrivateRoute><Retreat /></PrivateRoute>} />
+              <Route path="devolver" element={<PrivateRoute><ReturnProduct /></PrivateRoute>} />
               <Route path="produto">
-                <Route index element={<ProductPage />} />
+                <Route index element={<PrivateRoute><ProductPage /></PrivateRoute>} />
               </Route>
             </Route>
           </Route>

@@ -1,6 +1,6 @@
 import "./sidebar.scss"
 import Logo from "../../assets/images/GP.png"
-import {Link} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {
     AssignmentTurnedIn, Checkroom,
     Dashboard, Engineering, Error,
@@ -8,13 +8,22 @@ import {
 } from "@mui/icons-material";
 import { useContext } from "react";
 import { SidebarContext } from "../../context/sidebarContext";
+import { AuthContext } from "../../context/authContext";
 
 const Sidebar = () => {
 
     const { activeSidebar } = useContext(SidebarContext);
     const { dispatch } = useContext(SidebarContext);
-    const pathname = window.location.pathname
-
+    const location = useLocation();
+    const pathname = location.pathname
+    const auth = useContext(AuthContext)
+    const token = localStorage.getItem('authToken')
+    const navigate = useNavigate()
+    
+    async function handleLogout() {
+        await auth.logout(token)
+        navigate('/')
+    }
 
     return (
         <div className={activeSidebar ? "sidebar active" : "sidebar"}>
@@ -78,7 +87,7 @@ const Sidebar = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link to="/" className="link" >
+                            <Link to="/" className="link" onClick={handleLogout} >
                                 <span className="icon"><Logout /></span>
                                 <span className="title">Sair</span>
                             </Link>

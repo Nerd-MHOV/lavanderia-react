@@ -1,10 +1,14 @@
 .tableRetreat {
-    textarea {
+    input[type=number] {
         border: 1px solid #ccc;
         height: 38px;
         margin-bottom: -5px;
         border-radius: 5px;
-        outline: #2684ff;
         padding: 8px;
+        outline: #2684ff;
+        max-width: 70px;
+    }
+    .css-11xur9t-MuiPaper-root-MuiTableContainer-root {
+        overflow-x: inherit;
     }
 }

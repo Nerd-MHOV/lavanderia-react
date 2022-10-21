@@ -1,0 +1,17 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    color: var(--blue);
+    justify-content: space-between;
+    padding: 5px;
+    .menu, .support{
+        cursor: pointer;
+        svg{
+            width: 30px;
+            height: 30px;
+            font-weight: bold;
+        }
+    }
+
+}

@@ -8,7 +8,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Select from "react-select";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -32,19 +31,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function createData(idRetreat, type, service, product, size, status, obs) {
-    return { idRetreat, type, service, product, size, status, obs };
-}
 
-const rows = [
-    createData(1, <Select />, <Select />, <Select />, <Select />, <Select />, <textarea />),
-    createData(2, <Select />, <Select />, <Select />, <Select />, <Select />, <textarea />),
-    createData(3, <Select />, <Select />, <Select />, <Select />, <Select />, <textarea />),
-    createData(4, <Select />, <Select />, <Select />, <Select />, <Select />, <textarea />),
-];
-const headers = [ "Tipo", "Oficio", "Produto", "Tamanho", "Estado", "Obs"  ]
 
-export const TableRetreat = () => {
+export const TableRetreat = ({rows, headers}) => {
     return (
         <div className="tableRetreat">
             <TableContainer component={Paper}>
@@ -53,7 +42,7 @@ export const TableRetreat = () => {
                         <TableRow>
                             {
                                 headers.map((header) => (
-                                    <StyledTableCell key={header} align={header === "Obs" ? "center" : "left"}>
+                                    <StyledTableCell key={header} align={header === "Quantidade" ? "center" : "left"}>
                                         {header}
                                     </StyledTableCell>
                                 ))
@@ -69,8 +58,7 @@ export const TableRetreat = () => {
                                 <StyledTableCell>{row.service}</StyledTableCell>
                                 <StyledTableCell>{row.product}</StyledTableCell>
                                 <StyledTableCell>{row.size}</StyledTableCell>
-                                <StyledTableCell>{row.status}</StyledTableCell>
-                                <StyledTableCell align="center">{row.obs}</StyledTableCell>
+                                <StyledTableCell align="center">{row.quantity}</StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
