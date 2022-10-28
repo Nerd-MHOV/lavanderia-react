@@ -91,9 +91,10 @@ export default function TableMinimizable({rowsHeader, titleHeader, titleBody}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rowsHeader.map((row, indice) => (
-            <Row key={row.name} row={row} />
-          ))}
+          {rowsHeader && rowsHeader.map((row, indice) => {
+           return <Row key={row.id} row={row} />
+          })
+          }
         </TableBody>
       </Table>
     </TableContainer>

@@ -8,6 +8,26 @@ module.exports = {
         return res.json(collaborator)
     },
 
+    async debit (req, res) {
+        const collaborator = await Collaborator.findAll({
+            include: [
+                {
+                    association: "debit", required: true,
+                    include: [
+                        { association: "responsible" }, { 
+                            association: "product", include:[
+                                {association: "type"}, {association: "service"} , {association: "department"}
+                            ]
+                        }
+                    ]
+                },{
+                    association: "department"
+                }
+            ]
+        })
+        return res.json(collaborator)
+    },
+
     async store(req, res) {
         const { department_id, collaborator, cpf, mensalista } = req.body;
 
@@ -48,6 +68,25 @@ module.exports = {
                     [Op.or]: [department, 0]
                 }
             }
+        })
+
+        return res.json(response)
+    },
+
+    async fingerPrintFind(req, res) {
+        const { fingerId } = req.params;
+
+        if(!fingerId || fingerId === undefined || fingerId === 'undefined') {
+            return res.json({
+                message:{
+                    type: 'error',
+                    message: 'Digital não encontrada tente de novo'
+                }
+            });
+        }
+
+        const response = await Collaborator.findOne({
+            where: { fingerprint: fingerId }
         })
 
         return res.json(response)

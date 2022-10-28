@@ -50,6 +50,12 @@ const Sidebar = () => {
                                 <span className="title">Retirar</span>
                             </Link>
                         </li>
+                        <li className={(pathname === "/painel/retirarmanual") ? "hovered" : ""} >
+                            <Link to="/painel/retirarmanual" className="link" >
+                                <span className="icon"><ShoppingBag /></span>
+                                <span className="title">Retirar Manual</span>
+                            </Link>
+                        </li>
                         <li className={(pathname === "/painel/devolver") ? "hovered" : ""} >
                             <Link to="/painel/devolver" className="link" >
                                 <span className="icon"><AssignmentTurnedIn /></span>

@@ -26,13 +26,22 @@ export const AuthContextProvider = ({ children }) => {
     }
 
     const login = async (user, passwd) => {
-        const data = await api.login(user, passwd);
-        if(data.user && data.user.token) {
-            setUserLogin(data.user.user_id);
-            setToken(data.user.token);
-            return data.message;
-        }
-        return data.message || null;
+        const data = await api.login(user, passwd).then((data) => {
+            if(data.user && data.user.token) {
+                setUserLogin(data.user.user_id);
+                setToken(data.user.token);
+                return data.message;
+            }
+            return data.message || null;
+        }).catch((err) => {
+            return {
+                type: "error",
+                message: "Servidor fora do ar"
+            }
+        });
+
+        return data;
+        
     }
 
 

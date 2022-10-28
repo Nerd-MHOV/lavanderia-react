@@ -3,90 +3,360 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import TableMinimizable from "../../components/TableMinimizable";
 import "./style.scss";
 import Btn from "../../components/btn/Btn"
+import { useEffect, useRef } from "react";
+import { useApi } from "../../hooks/api";
+import { useState } from "react";
+import ModalFingerPrint from "../../components/ModalFingerPrint/ModalFingerPrint";
+import { Fingerprint, PersonPin } from "@mui/icons-material";
+import { TextField } from "@mui/material";
+import { useFingerPrint } from "../../hooks/fingerprint_api";
+import Message from "../../components/message/Message";
 
 //Padrão tabela
-function createData(name, department, lastRetreat, products ) {
+function createData(name, department, lastRetreat, products) {
     return {
-      name,
-      department,
-      lastRetreat,
-      products,
+        name,
+        department,
+        lastRetreat,
+        products,
     };
-  }
+}
 
-  
-const rowsHeader = [
-    createData('Felipe Alberto', 'Monitoria', '15/08 14:00',[
-        {
-            id: 1,
-            dateRetreat: '15/08 13:40',
-            type:'calça',
-            product:'verde',
-            service:'Peraltas',
-            size: 'G',
-            returnProduct: <Btn color="blue" action="Devolver"/>,
-        },
-    ]),
-    createData('Jean Rodrigues', 'Portaria', '15/08 14:00', [
-        {
-            id: 1,
-            dateRetreat: '15/08 13:40',
-            type:'calça',
-            product:'verde',
-            service:'Peraltas',
-            size: 'G',
-            returnProduct: <Btn color="blue" action="Devolver"/>,
-        },
-        {
-            id: 2,
-            dateRetreat: '15/08 13:40',
-            type:'calça',
-            product:'amarelo',
-            service:'Peraltas',
-            size: 'G',
-            returnProduct: <Btn color="blue" action="Devolver"/>,
-        }
-    ]),
-    createData('Matheus Henrique', 'T.I.', '15/08 14:00', [
-        {
-            id: 1,
-            dateRetreat: '15/08 13:40',
-            type:'calça',
-            product:'verde',
-            service:'Peraltas',
-            size: 'G',
-            returnProduct: <Btn color="blue" action="Devolver"/>,
-        }
-    ]),
-    createData('-', 'T.I.', '15/08 14:00', [
-        {
-            id: 1,
-            dateRetreat: '15/08 13:40',
-            type:'calça',
-            product:'verde',
-            service:'Peraltas',
-            size: 'G',
-            returnProduct: <Btn color="blue" action="Devolver"/>,
-        }
-    ]),
-];
+
+
 const titleHeader = ["NOME", "DEPARTAMENTO", "ÚLTIMA RETIRADA"];
+const titleHeaderDeparment = ["DEPARTAMENTO", "ÚLTIMA RETIRADA"];
 const titleBody = ["Data", "Tipo", "Produto", "Oficio", "Tamanho", "Devolver"];
+const titleBodyDepartment = ["Data", "Responsavel", "Tipo", "Produto", "Oficio", "Tamanho", "Devolver"];
+
+const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
 
 export const ReturnProduct = () => {
-    return(
+
+    const api = useApi();
+    const fingerPrint = useFingerPrint();
+
+    const [callback, setCallback] = useState([]);
+
+    const [outputs, setOutputs] = useState([]);
+    const [rowCollaborator, setRowCollaborator] = useState([]);
+    const [rowDepartment, setRowDepartment] = useState([]);
+
+
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [fingerIcon, setFingerIcon] = useState(true);
+    const [retreatSubmiting, setRetreatSubmiting] = useState(false);
+
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalResponsible, setModalResponsible] = useState('');
+    const [valueGood, setValueGood] = useState(0);
+    const [errorGood, setErrorGood] = useState(false);
+    const [textGood, setTextGood] = useState('');
+    const [valueBad, setValueBad] = useState(0);
+    const [maxValue, setMaxValue] = useState(0);
+
+    const [fingerCollaborator, setFingerCollaborator] = useState()
+
+    const fingerResponseRef = useRef();
+    const modalRetGoodRef = useRef();
+    const modalRetBadRef = useRef();
+
+    useEffect(() => {
+        getDebtors()
+    }, [])
+
+    useEffect(() => {
+        if (callback.type) {
+            setTimeout(() => {
+                setCallback([])
+            }, 5000)
+        }
+    }, [callback])
+
+    const getDebtors = async () => {
+        const api_response = await api.debitCollaborator();
+        makeLines(api_response)
+    }
+
+    const makeLines = async (outputsapi) => {
+        let lastFind = "2021-10-28T09:38:26.940Z";
+        let arrLines = await outputsapi.map(el => {
+            let arrLinesProducts = el.debit.map(prod => {
+                if (lastFind < prod.updatedAt) {
+                    lastFind = prod.updatedAt;
+                }
+                let dateUpdated = new Date(prod.updatedAt)
+                return {
+                    id: prod.id,
+                    dateRetreat: ((dateUpdated.getDate() + " " + meses[(dateUpdated.getMonth())] + " " + dateUpdated.getFullYear())),
+                    type: prod.product.type.type,
+                    product: prod.product.product,
+                    service: prod.product.service.service,
+                    size: prod.product.size,
+                    returnProduct: <Btn color={"blue"} action="Devolver" onClick={() => handleDevoluct(prod)} />
+                }
+            })
+
+            lastFind = new Date(lastFind)
+            return {
+                name: el.collaborator,
+                department: el.department !== null ? el.department.department : "Null",
+                lastRetreat: ((lastFind.getDate() + " " + meses[(lastFind.getMonth())] + " " + lastFind.getFullYear())),
+                products: arrLinesProducts,
+            }
+        })
+        setRowCollaborator(() => {
+            return arrLines.filter(line => line.name !== "SETOR")
+        });
+
+
+
+        const outputsDepartment = outputsapi.filter(output => output.id === 0)
+
+        let departmentOnly = outputsDepartment[0].debit.map(el => el.product.department)
+        departmentOnly = departmentOnly.filter((item, index, self) => index === self.findIndex((s) =>
+            s.id === item.id
+        ))
+        let arrLinesDepartment = departmentOnly.map(el => {
+            let lastFind = "2021-10-28T09:38:26.940Z";
+
+            let arrLinesProducts = outputsDepartment[0].debit.filter((prod) => {
+                if (prod.product.department.id !== el.id) {
+                    return false;
+                }
+                return true;
+            }).map(prod => {
+
+                if (lastFind < prod.updatedAt) {
+                    lastFind = prod.updatedAt;
+                }
+                let dateUpdated = new Date(prod.updatedAt)
+                return {
+                    id: prod.id,
+                    dateRetreat: ((dateUpdated.getDate() + " " + meses[(dateUpdated.getMonth())] + " " + dateUpdated.getFullYear())),
+                    responsible: prod.responsible.collaborator,
+                    type: prod.product.type.type,
+                    product: prod.product.product,
+                    service: prod.product.service.service,
+                    size: prod.product.size,
+                    returnProduct: <Btn color={"blue"} action="Devolver" onClick={() => handleDevoluct(prod, true)} />
+                }
+            })
+
+            lastFind = new Date(lastFind)
+            return {
+                name: el.department,
+                lastRetreat: ((lastFind.getDate() + " " + meses[(lastFind.getMonth())] + " " + lastFind.getFullYear())),
+                products: arrLinesProducts,
+            }
+        })
+
+
+
+
+        setRowDepartment(arrLinesDepartment)
+
+    }
+
+    const findPrint = async () => {
+        const find1 = await fingerPrint.find().then(async (find1) => {
+            fingerResponseRef.current.innerHTML = find1.msg;
+            const find2 = await fingerPrint.find2().then(async (find2) => {
+                if (find2.status === "201") {
+                    fingerResponseRef.current.innerHTML = "Digital não encontrada, Tente novamente!"
+                    setTimeout(() => {
+                        findPrint();
+                    }, 2000)
+                    return
+                }
+                const api_find_response = await api.fingerFind(find2.position).then((api_find_response) => {
+                    setFingerCollaborator(api_find_response.id)
+                    setFingerIcon(false);
+                    setRetreatSubmiting(true);
+                    fingerResponseRef.current.innerHTML = api_find_response.collaborator;
+
+                }).catch((err) => {
+                    fingerResponseRef.current.innerHTML = "Digital não encontrada, Tente novamente!"
+                    setTimeout(() => {
+                        findPrint();
+
+                    }, 2000)
+                });
+
+            })
+        }).catch((err) => {
+            console.log(err)
+            fingerResponseRef.current.innerHTML = "Verifique se o leitor esta ligado!";
+        })
+    }
+
+
+
+    const handleDevoluct = async (product, isSetor = false) => {
+        setModalTitle(`${product.amount} unid. de ${product.product.type.type} ${product.product.product} ${product.product.service.service}`);
+        setModalResponsible(product.responsible.collaborator)
+        setValueGood(product.amount)
+        setMaxValue(product.amount)
+        console.log(product)
+        setIsModalVisible(true);
+        setRetreatSubmiting(false);
+        setFingerIcon(true);
+        findPrint()
+    }
+
+    const handleChangeGood = (e, max) => {
+        //resset
+        setErrorGood(false)
+        setTextGood('')
+
+        let good = e.target.value
+        let bad = valueBad
+        let total = Number(good) + Number(bad)
+
+        if (total > max) {
+            setErrorGood(true)
+            setTextGood("A devolução não pode ser maior que o retirado!")
+        }
+
+        if (total == 0) {
+            setErrorGood(true)
+            setTextGood("Devolva ao menos 1 item!")
+        }
+
+        if (good < 0) {
+            e.target.value = 0
+        }
+        setValueGood(good)
+    }
+
+    const handleChangeBad = (e, max) => {
+        //resset
+        setErrorGood(false)
+        setTextGood('')
+
+        let bad = e.target.value
+        let good = valueGood
+        let total = Number(good) + Number(bad)
+
+        if (total > max) {
+            setErrorGood(true)
+            setTextGood("A devolução não pode ser maior que o retirado!")
+        }
+
+        if (total == 0) {
+            setErrorGood(true)
+            setTextGood("Devolva ao menos 1 item!")
+        }
+
+        if (bad < 0) {
+            e.target.value = 0
+        }
+        setValueBad(bad)
+    }
+
+
+    const handleSubmiting = async () => {
+
+        if (errorGood === true) {
+            return;
+        }
+
+        try {
+            const api_response = await api.returnFinger(valueGood, valueBad, fingerCollaborator)
+            setCallback(api_response.message)
+            if (api_response.message.type == "success") {
+                setIsModalVisible(false);
+                getDebtors();
+            }
+        } catch (err) {
+            setCallback({
+                type: "error",
+                message: "Erro no Servidor, tente novamente!"
+            })
+        }
+
+
+        setIsModalVisible(false);
+    }
+
+
+    return (
         <div className="returnProduct">
+
+
             <Sidebar />
             <div className="returnProductBx">
                 <Navbar />
+                {isModalVisible &&
+                    <ModalFingerPrint onClose={() => setIsModalVisible(false)} >
+                        {
+                            callback.type &&
+                            <Message message={callback.message} type={callback.type} />
+                        }
+                        <h2>{modalTitle}</h2>
+                        <div className="devoluctionContent">
+                            <h4><b>Retirado por:</b> {modalResponsible}</h4>
+                        </div>
+
+                        <h3>Devolver:</h3>
+                        <br />
+
+                        <TextField
+                            error={errorGood}
+                            helperText={textGood}
+                            defaultValue={valueGood}
+                            onChange={(e) => handleChangeGood(e, maxValue)}
+                            ref={modalRetGoodRef}
+                            label="Em perfeito estado"
+                            type="number"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            style={{ color: "green" }}
+                        />
+                        <br />
+
+                        <TextField
+                            error={errorGood}
+                            helperText={textGood}
+                            defaultValue={valueBad}
+                            onChange={(e) => handleChangeBad(e, maxValue)}
+                            ref={modalRetBadRef}
+                            label="Danificados"
+                            type="number"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+
+                        {
+                            fingerIcon ?
+                                <Fingerprint className="icon" style={{ width: "30%", height: "30%" }} />
+                                : <PersonPin className="icon" style={{ width: "30%", height: "30%" }} />
+                        }
+                        <h3 ref={fingerResponseRef}>Carregando...</h3>
+                        {
+                            retreatSubmiting &&
+                            <Btn action={"Devolver"} color="green" onClick={handleSubmiting} />
+                        }
+                        <br />
+                    </ModalFingerPrint>
+                }
+                {
+                    callback.type &&
+                    <Message message={callback.message} type={callback.type} />
+                }
                 <div className="p20">
                     <div className="containerBx">
 
+
+
                         <div className="titleContainerBx">Por Colaborador</div>
                         <hr className="hrTitleBx" />
-                        <TableMinimizable 
-                            rowsHeader={rowsHeader} 
+                        <TableMinimizable
+                            rowsHeader={rowCollaborator}
                             titleHeader={titleHeader}
                             titleBody={titleBody}
                         />
@@ -96,10 +366,10 @@ export const ReturnProduct = () => {
 
                         <div className="titleContainerBx">Por Departamento</div>
                         <hr className="hrTitleBx" />
-                        <TableMinimizable 
-                            rowsHeader={rowsHeader} 
-                            titleHeader={titleHeader}
-                            titleBody={titleBody}
+                        <TableMinimizable
+                            rowsHeader={rowDepartment}
+                            titleHeader={titleHeaderDeparment}
+                            titleBody={titleBodyDepartment}
                         />
                     </div>
                 </div>

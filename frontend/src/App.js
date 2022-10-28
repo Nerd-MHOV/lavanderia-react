@@ -9,6 +9,7 @@ import Retreat from "./pages/retreat/Retreat";
 import { ReturnProduct } from "./pages/ReturnProduct";
 import { ProductPage } from "./pages/ProductPage";
 import { PrivateRoute } from "./pages/PrivateRoute";
+import RetreatLegacy from "./pages/retreatLegacy/RetreatLegacy";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="painel" >
               <Route index element={<PrivateRoute><Home /></PrivateRoute>} />
               <Route path="retirar" element={<PrivateRoute><Retreat /></PrivateRoute>} />
+              <Route path="retirarmanual" element={<PrivateRoute><RetreatLegacy /></PrivateRoute>} />
               <Route path="devolver" element={<PrivateRoute><ReturnProduct /></PrivateRoute>} />
               <Route path="produto">
                 <Route index element={<PrivateRoute><ProductPage /></PrivateRoute>} />

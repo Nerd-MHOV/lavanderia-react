@@ -10,13 +10,23 @@ export const useApi = () => ({
         return response.data;
     },
     login: async (user, passwd) => {
-        const response = await api.post('/user/login', { user, passwd })
-        return response.data;
+        const response = await api.post('/user/login', { user, passwd }).then((response) => {
+
+            return response.data;
+        }).catch((err) => {
+            return {message: {
+                type: "error",
+                message: "Servidor fora do ar"
+            }}
+        })
+        return response
     },
     logout: async (token) => {
         const response = await api.post('/user/logout', {token});
         return response.data;
     },
+
+
     department: async () => {
         const response = await api.get('/department');
         return response.data;
@@ -25,9 +35,25 @@ export const useApi = () => ({
         const response = await api.get('/product');
         return response.data;
     },
+    debitCollaborator: async () => {
+        const response = await api.get('/collaborator/debit');
+        return response.data;
+    },
+
+
     retreat: async (arr) => {
-        const response = await api.post('/retreat', {arr});
+        const response = await api.post('/output/retreat', {arr});
+        return response.data;
+    },
+    retreatFinger: async (form, collaborator) => {
+        const response = await api.post('/output/retreatfinger', {form, collaborator});
+        return response.data;
+    },
+    fingerFind: async (str) => {
+        const response = await api.get(`/fingerprint/${str}`);
         return response.data;
     }
+
+
 
 });

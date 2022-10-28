@@ -1,5 +1,4 @@
 require('dotenv').config()
-const mysql = require('mysql2')
 module.exports = {
     dialect: process.env.DB_DIALECT, //postgress
     host: process.env.DB_HOST,

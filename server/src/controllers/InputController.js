@@ -24,9 +24,19 @@ module.exports = {
         const { id } = req.params;
 
         const deleteInput = await Input.destroy({
-            where: { id }
+            where: { id }, individualHooks: true,
         })
 
         return res.json(deleteInput)
     },
+
+    async update(req, res) {
+        const { id, amount } = req.body;
+
+        const updatedInput = await Input.update({amount},{
+            where: {id}, individualHooks: true,
+        })
+
+        return res.json(this.updatedInput)
+    }
 }

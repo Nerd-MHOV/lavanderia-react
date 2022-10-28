@@ -15,10 +15,21 @@ const Login = () => {
     const [callback, setCallback] = useState([])
     const auth = useContext(AuthContext)
     async function handleLogin(e) {
+        e.preventDefault();
         try {
-            e.preventDefault();
-            const response = await auth.login(user, passwd)
-            setCallback(response)
+            const response = await auth.login(user, passwd).then((response) => {
+                console.log("aqui", response)
+                if(response) {
+                    setCallback(response)
+                } else {
+                    setCallback({
+                        type: "error",
+                        message: "SERVIDOR FORA DO AR"
+                    })
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
 
         } catch (err) {
             console.log(err)
@@ -29,6 +40,7 @@ const Login = () => {
     if (auth.userLogin) {
         return <Navigate to="/painel" />
     }
+
 
 
     return (

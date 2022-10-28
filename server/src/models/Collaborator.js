@@ -7,13 +7,15 @@ class Collaborator extends Model {
             cpf: DataTypes.STRING,
             mensalista: DataTypes.BOOLEAN,
             active: DataTypes.BOOLEAN,
+            fingerprint: DataTypes.INTEGER,
         }, {
             sequelize,
         })
     }
 
     static associate(models) {
-        this.belongsTo(models.Department, { foreignKey: 'department_id', as:'department'})
+        this.belongsTo(models.Department, { foreignKey: 'department_id', as: 'department'})
+        this.hasMany(models.Output, { foreignKey: 'collaborator_id', as: 'debit' })
     }
 }
 

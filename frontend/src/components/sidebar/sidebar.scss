@@ -69,6 +69,25 @@
     transition: opacity 0.5s;
     overflow: hidden;
     transition: 0.5s;
+    overflow: auto;
+    direction: ltr;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255, 255, 255) transparent;
+    
+    &::-webkit-scrollbar {
+      direction: ltr;
+      width: 3px;
+      height: 3px; /* A altura só é vista quando a rolagem é horizontal */
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      padding: 2px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(255, 255, 255);
+    }
     ul {
       position: absolute;
       top: 0;

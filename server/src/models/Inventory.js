@@ -6,6 +6,7 @@ class Inventory extends Model {
             amount: DataTypes.INTEGER,
         }, {
             sequelize,
+            tableName: 'inventory',
         })
     }
 

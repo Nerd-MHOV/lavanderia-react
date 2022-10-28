@@ -14,6 +14,7 @@ const Output = require('../models/Output')
 const Output_log = require('../models/Output_log')
 const Return = require('../models/Return')
 
+
 const connection = new Sequelize(dbConfig)
 
 

@@ -1,4 +1,5 @@
-const { Model, DataTypes } = require('sequelize')
+const { Model, DataTypes } = require('sequelize');
+const Output = require('./Output');
 
 class Return extends Model {
     static init(sequelize) {
