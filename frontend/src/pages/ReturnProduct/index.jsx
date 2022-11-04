@@ -11,6 +11,8 @@ import { Fingerprint, PersonPin } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import { useFingerPrint } from "../../hooks/fingerprint_api";
 import Message from "../../components/message/Message";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
 
 //Padrão tabela
 function createData(name, department, lastRetreat, products) {
@@ -34,6 +36,7 @@ const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "O
 
 export const ReturnProduct = () => {
 
+    const auth = useContext(AuthContext)
     const api = useApi();
     const fingerPrint = useFingerPrint();
 
@@ -42,8 +45,6 @@ export const ReturnProduct = () => {
     const [outputs, setOutputs] = useState([]);
     const [rowCollaborator, setRowCollaborator] = useState([]);
     const [rowDepartment, setRowDepartment] = useState([]);
-
-
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [fingerIcon, setFingerIcon] = useState(true);
@@ -56,8 +57,14 @@ export const ReturnProduct = () => {
     const [textGood, setTextGood] = useState('');
     const [valueBad, setValueBad] = useState(0);
     const [maxValue, setMaxValue] = useState(0);
+    const [errorObs, setErrorObs] = useState(false);
+    const [textObs, setTextObs] = useState('');
+    const [contentObs, setContentObs] = useState('');
 
-    const [fingerCollaborator, setFingerCollaborator] = useState()
+
+    const [fingerCollaborator, setFingerCollaborator] = useState();
+    const [outputId, setOutputId] = useState();
+    const [visibleObsReturn, setVisibleObsReturn] = useState(false);
 
     const fingerResponseRef = useRef();
     const modalRetGoodRef = useRef();
@@ -198,11 +205,13 @@ export const ReturnProduct = () => {
         setModalTitle(`${product.amount} unid. de ${product.product.type.type} ${product.product.product} ${product.product.service.service}`);
         setModalResponsible(product.responsible.collaborator)
         setValueGood(product.amount)
+        setValueBad(0)
+        setOutputId(product.id)
         setMaxValue(product.amount)
-        console.log(product)
         setIsModalVisible(true);
         setRetreatSubmiting(false);
         setFingerIcon(true);
+        setVisibleObsReturn(false);
         findPrint()
     }
 
@@ -229,6 +238,7 @@ export const ReturnProduct = () => {
             e.target.value = 0
         }
         setValueGood(good)
+        setMaxValue(total)
     }
 
     const handleChangeBad = (e, max) => {
@@ -250,35 +260,72 @@ export const ReturnProduct = () => {
             setTextGood("Devolva ao menos 1 item!")
         }
 
+        if (bad > 0) {
+            if (visibleObsReturn !== true) {
+                setErrorObs(true)
+                setVisibleObsReturn(true);
+            }
+        } else {
+            setErrorObs(false)
+            setVisibleObsReturn(false);
+        }
+
         if (bad < 0) {
             e.target.value = 0
         }
         setValueBad(bad)
+        setMaxValue(total)
+    }
+
+    const handleChangeObs = async (e) => {
+        let text = e.target.value
+        setErrorObs(false)
+        setTextObs('')
+        setContentObs(text)
+        if (text == "") {
+            setErrorObs(true);
+            setTextObs("Você precisa descrever o estado do item!")
+        }
     }
 
 
     const handleSubmiting = async () => {
 
-        if (errorGood === true) {
+        if (errorGood === true || errorObs === true) {
             return;
         }
 
         try {
-            const api_response = await api.returnFinger(valueGood, valueBad, fingerCollaborator)
+
+
+
+            const api_response = await api.returnFinger(
+                outputId,
+                fingerCollaborator,
+                auth.userLogin,
+                maxValue,
+                valueBad,
+                contentObs,
+            )
+
+            console.log(api_response);
             setCallback(api_response.message)
             if (api_response.message.type == "success") {
                 setIsModalVisible(false);
                 getDebtors();
+                window.scrollTo(0,0);
             }
+
+
+
+
+
         } catch (err) {
             setCallback({
                 type: "error",
                 message: "Erro no Servidor, tente novamente!"
             })
         }
-
-
-        setIsModalVisible(false);
     }
 
 
@@ -331,10 +378,27 @@ export const ReturnProduct = () => {
                             }}
                         />
 
+                        <br />
+
+                        {
+                            visibleObsReturn &&
+                            <TextField
+                                error={errorObs}
+                                helperText={textObs}
+                                onChange={(e) => handleChangeObs(e)}
+                                label="Descrição do item danificado"
+                                type="text"
+                                defaultValue={contentObs}
+                                placeholder="Descreva o defeito do(s) item(s)!"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />}
+
                         {
                             fingerIcon ?
-                                <Fingerprint className="icon" style={{ width: "30%", height: "30%" }} />
-                                : <PersonPin className="icon" style={{ width: "30%", height: "30%" }} />
+                                <Fingerprint className="icon" style={{ width: "25%", height: "25%" }} />
+                                : <PersonPin className="icon" style={{ width: "25%", height: "25%" }} />
                         }
                         <h3 ref={fingerResponseRef}>Carregando...</h3>
                         {
@@ -344,14 +408,14 @@ export const ReturnProduct = () => {
                         <br />
                     </ModalFingerPrint>
                 }
-                {
-                    callback.type &&
-                    <Message message={callback.message} type={callback.type} />
-                }
+
                 <div className="p20">
                     <div className="containerBx">
 
-
+                        {
+                            callback.type &&
+                            <Message message={callback.message} type={callback.type} />
+                        }
 
                         <div className="titleContainerBx">Por Colaborador</div>
                         <hr className="hrTitleBx" />

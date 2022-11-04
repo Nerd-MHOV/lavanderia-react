@@ -52,8 +52,18 @@ export const useApi = () => ({
     fingerFind: async (str) => {
         const response = await api.get(`/fingerprint/${str}`);
         return response.data;
-    }
+    },
 
+
+    returnFinger: async (output_id, responsible_out_id, user_id, amount_return, amount_bad, obs_out) => {
+        const response = await api.post('/return/fingerprint', {output_id, responsible_out_id, user_id, amount_return, amount_bad, obs_out})
+        return response.data;
+    },
+
+    createType: async (type) => {
+        const response = await api.post('/producttype/create', {type})
+        return response.data;
+    }
 
 
 });

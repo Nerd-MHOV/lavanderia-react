@@ -31,6 +31,7 @@ routes.get('/fingerprint/:fingerId', CollaboratorController.fingerPrintFind)
 
 routes.get('/producttype', ProductTypeController.index);
 routes.post('/producttype/create', ProductTypeController.store);
+routes.delete('/producttype/:id', ProductTypeController.delete);
 
 routes.get('/productservice', ProductServiceController.index);
 routes.post('/productservice/create', ProductServiceController.store);
@@ -52,6 +53,7 @@ routes.post('/output/retreatfinger', OutputController.retreatFinger);
 
 routes.get('/return', ReturnController.index);
 routes.post('/return', ReturnController.store);
+routes.post('/return/fingerprint', ReturnController.fingerPrintReturn);
 
 
 module.exports = routes;

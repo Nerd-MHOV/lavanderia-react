@@ -13,17 +13,17 @@ module.exports = {
 
         //receber paramentros
         const {
-            product_type,
+            type,
         } = req.body;
 
         try {
             // verificar se ja existe e criar
             const [create, created] = await ProductType.findOrCreate({
                 defaults: {
-                    type: product_type,
+                    type,
                 },
                 where: {
-                    type: product_type
+                    type
                 }
             });
 
@@ -31,7 +31,7 @@ module.exports = {
                 return res.json({
                     message: {
                         type: 'error',
-                        message: 'Esse "tipo" de produto ja existe'
+                        message: `${create.type} já existe`
                     }
                 })
             }
@@ -39,7 +39,7 @@ module.exports = {
             return res.json({
                 message: {
                     type: 'success',
-                    message: 'Um novo "tipo" de produto foi adicionado!'
+                    message: `O tipo ${create.type} foi criado!`
                 }
             });
 
@@ -48,10 +48,21 @@ module.exports = {
             return res.json({
                 message: {
                     type: 'error',
-                    message: error
+                    message: error.errors[0].message ? error.errors[0].message : error
                 }
             })
         }
 
     },
+
+    async delete(req, res) {
+        const { id } = req.params;
+        
+
+        const deleted = ProductType.destroy({
+            where: {id}
+        })
+
+        return res.json(deleted)
+    }
 }
