@@ -10,47 +10,8 @@ import { RegisterFingerprint } from "../../components/RegisterFingerprint/Regist
 import Sidebar from "../../components/sidebar/Sidebar"
 import { useApi } from "../../hooks/api"
 import './style.scss'
-
-const useFakeMutation = () => {
-    return useCallback(
-        (user) =>
-            new Promise((resolve, reject) =>
-                setTimeout(() => {
-                    if (user.name?.trim() === '') {
-                        reject();
-                    } else {
-                        resolve(user);
-                    }
-                }, 200),
-            ),
-        [],
-    );
-};
-
-function computeMutation(newRow, oldRow) {
-    if (newRow.name !== oldRow.name) {
-        return `Nome de '${oldRow.name}' para '${newRow.name}'`;
-    }
-    if (newRow.age !== oldRow.age) {
-        return `Age from '${oldRow.age || ''}' to '${newRow.age || ''}'`;
-    }
-    if (newRow.type !== oldRow.type) {
-        return `Tipo do '${oldRow.name}' de '${oldRow.type || ''}' para '${newRow.type || ''}'`;
-    }
-    if (newRow.department !== oldRow.department) {
-        return `Departamento do '${oldRow.name}' de '${oldRow.department || ''}' para '${newRow.department || ''}'`;
-    }
-    if (newRow.status !== oldRow.status) {
-        console.log(newRow, oldRow)
-        let oldStatus = oldRow.status ? 'Ativo' : 'desativado'
-        let newStatus = newRow.status ? 'Ativo' : 'desativado'
-        return `Status de '${oldStatus}' para '${newStatus}'`;
-    }
-    if (newRow.fingerprint !== oldRow.fingerprint && oldRow.fingerprint !== 0 ) {
-        return `Status da digital do '${oldRow.name}' para 'não cadastrada'`;
-    }
-    return null;
-}
+import { useFakeMutation, computeMutation } from "./funcMutation"
+import { makeLines, makeOptionsDepartments } from "./tableContent"
 
 
 export const CollaboratorsPage = () => {
@@ -122,37 +83,12 @@ export const CollaboratorsPage = () => {
 
     const getCollaborators = async () => {
         const response = await api.collaborator();
-        makeLines(response)
+        setRowsTable(await makeLines(response))
     }
 
     const getDepatments = async () => {
         const response = await api.department();
-        makeOptionsDepartments(response);
-    }
-
-    const makeLines = async (arrayLine) => {
-        const arrLines = await arrayLine.map(el => {
-            return {
-                id: el.id,
-                name: el.collaborator,
-                department: el.department.department,
-                type: el.mensalista ? 'mensalista' : 'diarista',
-                status: el.active,
-                fingerprint: el.fingerprint,
-                cpf: el.cpf,
-            }
-        })
-
-        console.log("ARRLINES", arrLines)
-        setRowsTable(arrLines);
-    }
-
-    const makeOptionsDepartments = async (arrDepartment) => {
-        const listDepartment = await arrDepartment.map( el => {
-            return { value: el.department, label: el.department, id: el.id}
-        })
-
-        setOptionsDepartments(listDepartment);
+        setOptionsDepartments(await makeOptionsDepartments(response))
     }
 
     const handleEditCollaborator = (params) => {
@@ -171,9 +107,6 @@ export const CollaboratorsPage = () => {
         setIsVisibleModal(true);
     }
 
-
-
-
     const processRowUpdate = useCallback(
         (newRow, oldRow) =>
             new Promise((resolve, reject) => {
@@ -187,7 +120,6 @@ export const CollaboratorsPage = () => {
             }),
         [],
     );
-
 
     const handleNo = () => {
         const { oldRow, resolve } = promiseArguments;
