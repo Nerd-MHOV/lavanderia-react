@@ -4,7 +4,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import {
     AssignmentTurnedIn, Checkroom,
     Dashboard, Engineering, Error,
-    Inventory, Logout, ShoppingBag, Tune, Menu
+    Inventory, Logout, ShoppingBag, Tune, Menu, People
 } from "@mui/icons-material";
 import { useContext } from "react";
 import { SidebarContext } from "../../context/sidebarContext";
@@ -68,13 +68,13 @@ const Sidebar = () => {
                                 <span className="title">Produto</span>
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/" className="link" >
+                        <li className={(pathname) === "/painel/colaborador" ? "hovered" : ""}>
+                            <Link to="/painel/colaborador" className="link" >
                                 <span className="icon"><Engineering /></span>
-                                <span className="title">Departamento</span>
+                                <span className="title">Colaborador</span>
                             </Link>
                         </li>
-                        <li>
+                        {/* <li>
                             <Link to="/" className="link" >
                                 <span className="icon"><Error /></span>
                                 <span className="title">Danificados</span>
@@ -85,13 +85,13 @@ const Sidebar = () => {
                                 <span className="icon"><Inventory /></span>
                                 <span className="title">Estoque</span>
                             </Link>
-                        </li>
-                        <li>
+                        </li> */}
+                        {/* <li>
                             <Link to="/" className="link" >
                                 <span className="icon"><Tune /></span>
                                 <span className="title">Painel</span>
                             </Link>
-                        </li>
+                        </li> */}
                         <li>
                             <Link to="/" className="link" onClick={handleLogout} >
                                 <span className="icon"><Logout /></span>

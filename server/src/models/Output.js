@@ -8,6 +8,7 @@ class Output extends Model {
             amount: DataTypes.INTEGER,
             status: DataTypes.BOOLEAN,
             obs: DataTypes.STRING,
+            validate: DataTypes.BOOLEAN,
         }, {
             sequelize,
             hooks: {

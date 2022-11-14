@@ -13,6 +13,7 @@ const Input = require('../models/Input')
 const Output = require('../models/Output')
 const Output_log = require('../models/Output_log')
 const Return = require('../models/Return')
+const ConfigDb = require('../models/ConfigDb')
 
 
 const connection = new Sequelize(dbConfig)
@@ -30,7 +31,7 @@ Input.init(connection)
 Output.init(connection)
 Output_log.init(connection)
 Return.init(connection)
-
+ConfigDb.init(connection)
 
 Department.associate(connection.models)
 DepartmentHead.associate(connection.models)

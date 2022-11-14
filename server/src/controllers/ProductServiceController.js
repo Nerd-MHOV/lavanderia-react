@@ -13,17 +13,17 @@ module.exports = {
 
         //receber paramentros
         const {
-            product_service,
+            service,
         } = req.body;
 
         try {
             // verificar se ja existe e criar
             const [create, created] = await ProductService.findOrCreate({
                 defaults: {
-                    service: product_service,
+                    service 
                 },
                 where: {
-                    service: product_service
+                    service
                 }
             });
 
@@ -48,7 +48,8 @@ module.exports = {
             return res.json({
                 message: {
                     type: 'error',
-                    message: error
+                    message: "erro tente novamente",
+                    debug: error.toString()
                 }
             })
         }

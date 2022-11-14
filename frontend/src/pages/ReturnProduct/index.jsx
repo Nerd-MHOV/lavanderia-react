@@ -82,9 +82,12 @@ export const ReturnProduct = () => {
         }
     }, [callback])
 
+
+    
     const getDebtors = async () => {
         const api_response = await api.debitCollaborator();
         makeLines(api_response)
+        console.log("chamou")
     }
 
     const makeLines = async (outputsapi) => {
@@ -337,7 +340,7 @@ export const ReturnProduct = () => {
             <div className="returnProductBx">
                 <Navbar />
                 {isModalVisible &&
-                    <ModalFingerPrint onClose={() => setIsModalVisible(false)} >
+                    <ModalFingerPrint onClose={() => setIsModalVisible(false) } >
                         {
                             callback.type &&
                             <Message message={callback.message} type={callback.type} />
@@ -347,8 +350,7 @@ export const ReturnProduct = () => {
                             <h4><b>Retirado por:</b> {modalResponsible}</h4>
                         </div>
 
-                        <h3>Devolver:</h3>
-                        <br />
+                        <h3 style={{marginBottom: "15px"}}>Devolver:</h3>
 
                         <TextField
                             error={errorGood}
@@ -361,7 +363,7 @@ export const ReturnProduct = () => {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                            style={{ color: "green" }}
+                            style={{ color: "green", marginBottom: "15px" }}
                         />
                         <br />
 
@@ -400,12 +402,12 @@ export const ReturnProduct = () => {
                                 <Fingerprint className="icon" style={{ width: "25%", height: "25%" }} />
                                 : <PersonPin className="icon" style={{ width: "25%", height: "25%" }} />
                         }
-                        <h3 ref={fingerResponseRef}>Carregando...</h3>
+                        <h3 style={{marginBottom: "15px"}} ref={fingerResponseRef}>Carregando...</h3>
                         {
                             retreatSubmiting &&
-                            <Btn action={"Devolver"} color="green" onClick={handleSubmiting} />
+                            <Btn style={{marginBottom: "15px"}} action={"Devolver"} color="green" onClick={handleSubmiting} />
                         }
-                        <br />
+                        <br style={{marginBottom: '15px'}}/>
                     </ModalFingerPrint>
                 }
 

@@ -5,13 +5,34 @@ const api = axios.create({
 })
 
 export const useFingerPrint = () => ({
-    find: async (token) => {
+    find: async () => {
         const response = await api.get('/find');
         return response.data;
     },
-    find2: async (user, passwd) => {
+    find2: async () => {
         const response = await api.get('/find2')
         return response.data;
     },
+    
+
+    register: async () => {
+        const response = await api.get('/register')
+        return response.data
+    },
+    register2: async () => {
+        const response = await api.get('/register2')
+        return response.data
+    },
+    register3: async () => {
+        const response = await api.get('/register3')
+        return response.data
+    },
+    register4: async (id) => {
+        const response = await api.get('/register4?param='+id)
+        return response.data
+    },
+
+
+
 
 });

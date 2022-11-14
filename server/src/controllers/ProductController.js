@@ -67,7 +67,8 @@ module.exports = {
             return res.json({
                 message: {
                     type: 'error',
-                    message: error
+                    message: 'Houve um erro, tente novamente',
+                    debug: error.errors[0]
                 }
             })
         }

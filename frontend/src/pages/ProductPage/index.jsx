@@ -3,13 +3,15 @@ import Sidebar from "../../components/sidebar/Sidebar"
 import "./style.scss"
 
 import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { useEffect } from "react";
 import { useApi } from "../../hooks/api";
 import { useState } from "react";
 import Btn from "../../components/btn/Btn";
 import ModalFingerPrint from "../../components/ModalFingerPrint/ModalFingerPrint";
 import { NewType } from "../../components/NewType/NewType";
+import { NewService } from "../../components/NewService/NewService";
+import { NewProduct } from "../../components/NewProduct/NewProduct";
 
 
 
@@ -72,7 +74,7 @@ export const ProductPage = () => {
         }
 
         if(type === "service") {
-            setModalNewType(true)
+            setModalNewService(true)
         }
 
         if(type === "product") {
@@ -81,6 +83,11 @@ export const ProductPage = () => {
 
 
         setIsVisibleModal(true);
+    }
+
+    const handleNewProductSuccess = async () => {
+        setIsVisibleModal(false);
+        getProducts();
     }
 
     return (
@@ -95,6 +102,12 @@ export const ProductPage = () => {
                         {
                             modalNewType && <NewType />
                         }
+                        {
+                            modalNewService && <NewService />
+                        }
+                        {
+                            modalNewProduct && <NewProduct onSuccess={handleNewProductSuccess} />
+                        }
                     </ModalFingerPrint>
 
                 }
@@ -107,6 +120,9 @@ export const ProductPage = () => {
                                 columns={columns}
                                 // autoHeight
                                 checkboxSelection
+                                components={{
+                                    Toolbar: GridToolbar,
+                                }}
                             />
                         </div>
 

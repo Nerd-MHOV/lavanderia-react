@@ -10,6 +10,7 @@ const ProductController = require('./controllers/ProductController');
 const InputController = require('./controllers/InputController');
 const OutputController = require('./controllers/OutputController');
 const ReturnController = require('./controllers/ReturnController');
+const ConfigDbController = require('./controllers/ConfigDbController');
 
 routes.get('/user', UserController.index);
 routes.post('/user/create', UserController.store);
@@ -25,8 +26,11 @@ routes.post('/departmenthead/create', DepartmentHeadController.store);
 
 routes.get('/collaborator', CollaboratorController.index);
 routes.get('/collaborator/debit', CollaboratorController.debit)
-routes.get('/collaborator/:department', CollaboratorController.department)
 routes.post('/collaborator/create', CollaboratorController.store)
+routes.get('/collaborator/retreat/:id', CollaboratorController.pendentRetreats)
+routes.post('/collaborator/update', CollaboratorController.update)
+routes.get('/collaborator/:id', CollaboratorController.indexPk);
+routes.get('/collaborator/department/:department', CollaboratorController.department)
 routes.get('/fingerprint/:fingerId', CollaboratorController.fingerPrintFind)
 
 routes.get('/producttype', ProductTypeController.index);
@@ -54,6 +58,13 @@ routes.post('/output/retreatfinger', OutputController.retreatFinger);
 routes.get('/return', ReturnController.index);
 routes.post('/return', ReturnController.store);
 routes.post('/return/fingerprint', ReturnController.fingerPrintReturn);
+
+routes.get('/config', ConfigDbController.index)
+routes.post('/config/create', ConfigDbController.store)
+routes.get('/config/fingercreate', ConfigDbController.newFinger)
+routes.post('/config/fingerremovenum', ConfigDbController.removeFingerNum)
+routes.post('/config/fingerrecovery', ConfigDbController.recoveryFinger)
+
 
 
 module.exports = routes;

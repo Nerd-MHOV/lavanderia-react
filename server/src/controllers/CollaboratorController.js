@@ -1,10 +1,18 @@
 const Collaborator = require('../models/Collaborator')
 const CPF = require('cpf-cnpj-validator')
 const { findAll } = require('../models/Collaborator')
+const { Op } = require('sequelize')
+const Output = require('../models/Output')
 
 module.exports = {
     async index(req, res) {
-        const collaborator = await Collaborator.findAll()
+        const collaborator = await Collaborator.findAll({where: {id: {[Op.not]: '0'}}, include: 'department'})
+        return res.json(collaborator)
+    },
+
+    async indexPk(req, res) {
+        const {id} = req.params
+        const collaborator = await Collaborator.findByPk(id)   
         return res.json(collaborator)
     },
 
@@ -90,5 +98,75 @@ module.exports = {
         })
 
         return res.json(response)
+    },
+
+    async pendentRetreats(req, res) {
+        const {id} = req.params
+
+        const collaborator = await Collaborator.findByPk(id, {
+            include: [
+                {
+                    association: "debit", required: true,
+                    include: [
+                        { association: "responsible" }, { 
+                            association: "product", include:[
+                                {association: "type"}, {association: "service"} , {association: "department"}
+                            ]
+                        }
+                    ]
+                },{
+                    association: "department"
+                }
+            ]
+        })
+        return res.json(collaborator)
+    },
+
+
+    async update(req, res) {
+        const {
+            id,
+            department_id,
+            collaborator,
+            cpf,
+            mensalista,
+            active,
+            fingerprint
+
+        } = req.body;
+
+
+        try {
+            const response = await Collaborator.update({
+                department_id,
+                collaborator,
+                cpf,
+                mensalista,
+                active,
+                fingerprint,
+            },{
+                where: {id}
+            })
+
+            return res.json({message:{
+                message: "Usuario atualizado com sucesso!",
+                type: "success",
+                debug: response
+            }})
+        } catch (error) {
+            console.log(error)
+            return res.json({message: {
+                message: "Erro, tente novamente",
+                type: "error",
+                debug:error
+            }})
+        }
+
+        
+        return null
+
+
     }
+
+
 }

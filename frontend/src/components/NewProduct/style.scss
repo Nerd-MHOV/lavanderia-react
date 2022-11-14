@@ -1,0 +1,17 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+    gap: 20px;
+    .content{
+        display: grid;
+        
+    }
+    .btn{
+        width: 50%;
+        margin: 0 auto;
+    }
+    .css-26l3qy-menu {
+        z-index: 5;
+    }
+}
