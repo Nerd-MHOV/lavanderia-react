@@ -1,0 +1,202 @@
+.sidebar {
+  height: 100vh;
+  min-width: 300px;
+  transition: 0.5s;
+  z-index: 999;
+  &.active {
+    min-width: 70px;
+    transition: 0.5s;
+    .navigation{
+      width: 70px;
+      transition: 0.5s;
+    }
+  }
+  .btnMenu {
+    color: var(--white);
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    display: none;
+    z-index: 1;
+    transition: 0.6s;
+    svg{
+      width: 30px;
+      height: 30px;
+      font-weight: bold;
+    }
+  }
+  @media screen and (max-width: 980px){
+    min-width: 0;
+    transition: 0.5s;
+    .navigation{
+      width: 0px !important;
+      transition: 0.5s;
+    }
+    &.active{
+      min-width: 300px;
+      transition: 0.5s;
+      .navigation{
+        width: 300px !important;
+        transition: 0.5s;
+      }
+    }
+  }
+  @media screen and (max-width: 850px){
+    &.active{
+      min-width: 100%;
+      position: absolute;
+      .navigation{
+        width: 100% !important;
+        transition: 0.5s;
+      }
+      .btnMenu{
+        display: flex;
+        transition: 0.6s;
+      }
+    }
+  }
+  .navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: var(--blue);
+    transition: opacity 0.5s;
+    overflow: hidden;
+    transition: 0.5s;
+    overflow: auto;
+    direction: ltr;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255, 255, 255) transparent;
+    
+    &::-webkit-scrollbar {
+      direction: ltr;
+      width: 3px;
+      height: 3px; /* A altura só é vista quando a rolagem é horizontal */
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      padding: 2px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(255, 255, 255);
+    }
+    ul {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      li {
+        position: relative;
+        width: 100%;
+        list-style: none;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
+        &:nth-child(1) {
+          margin-bottom: 40px;
+          pointer-events: none;
+          .title{
+            font-weight: bold;
+            font-size: 21px;
+          }
+          .link {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+          }
+          .logo_peraltas {
+            position: relative;
+            display: block;
+            min-width: 60px;
+            height: 60px;
+            line-height: 70px;
+            text-align: center;
+            padding: 10px 15px;
+            img {
+              width: 30px;
+            }
+          }
+        }
+        &:hover {
+          background: var(--lightblue);
+          &:before, &:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            pointer-events: none;
+          }
+          &:before{
+            top: -50px;
+            box-shadow: 35px 35px 0 10px var(--lightblue);
+          }
+          &:after{
+            bottom: -50px;
+            box-shadow: 35px -35px 0 10px var(--lightblue);
+            z-index: 1;
+          }
+          .link {
+            color: var(--blue);
+          }
+        }
+        &.hovered {
+          background: var(--white);
+          &:before, &:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+          }
+          &:before{
+            top: -50px;
+            box-shadow: 35px 35px 0 10px var(--white);
+          }
+          &:after{
+            bottom: -50px;
+            box-shadow: 35px -35px 0 10px var(--white);
+          }
+          .link {
+            color: var(--blue);
+          }
+        }
+        .link {
+          position: relative;
+          display: flex;
+          width: 100%;
+          text-decoration: none;
+          color: var(--white);
+          .icon {
+            position: relative;
+            display: block;
+            min-width: 60px;
+            height: 60px;
+            line-height: 70px;
+            text-align: center;
+          }
+          .title {
+            position: relative;
+            display: block;
+            padding: 0 10px;
+            height: 60px;
+            line-height: 60px;
+            text-align: start;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}

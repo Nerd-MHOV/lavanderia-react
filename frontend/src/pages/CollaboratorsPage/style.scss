@@ -1,0 +1,18 @@
+.collaborators_page {
+    display: flex;
+
+    .pageBx {
+        width: 100%;
+    }
+
+    .buttons {
+        display: flex;
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .MuiButtonBase-root {
+        color: var(--blue);
+    }
+}
