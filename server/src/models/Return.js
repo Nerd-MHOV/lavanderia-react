@@ -20,7 +20,7 @@ class Return extends Model {
 
     static associate(models) {
         this.belongsTo(models.Product, {foreignKey: 'product_id', as: 'product'})
-        this.belongsTo(models.Collaborator, {foreignKey: 'collaborator_id', as: 'Collaborator'})
+        this.belongsTo(models.Collaborator, {foreignKey: 'collaborator_id', as: 'collaborator'})
         this.belongsTo(models.Collaborator, {foreignKey: 'responsible_in_id', as: 'responsible_in'})
         this.belongsTo(models.Collaborator, {foreignKey: 'responsible_out_id', as: 'responsible_out'})
         this.belongsTo(models.User, {foreignKey: 'user_id', as: 'user'})

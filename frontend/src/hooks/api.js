@@ -50,12 +50,6 @@ export const useApi = () => ({
         const response = await api.get('/product');
         return response.data;
     },
-    createProduct: async (department, type, service, product, size, unitary_value) => {
-        const response = await api.post('/product/create', {
-            department, type, service, product, size, unitary_value
-        })
-        return response.data
-    },
     debitCollaborator: async () => {
         const response = await api.get('/collaborator/debit');
         return response.data;
@@ -101,12 +95,12 @@ export const useApi = () => ({
         console.log('DESTROy')
         return response.data;
     },
-
+    
     returnFinger: async (output_id, responsible_out_id, user_id, amount_return, amount_bad, obs_out) => {
         const response = await api.post('/return/fingerprint', {output_id, responsible_out_id, user_id, amount_return, amount_bad, obs_out})
         return response.data;
     },
-
+    
     createType: async (type) => {
         const response = await api.post('/producttype/create', {type})
         return response.data;
@@ -114,6 +108,35 @@ export const useApi = () => ({
     createService: async (service) => {
         const response = await api.post('/productservice/create', {service} )
         return response.data;
+    },
+    createDepartment: async (department) => {
+        const response = await api.post('/department/create', {department})
+        return response.data;
+    },
+    createProduct: async (department, type, service, product, size, unitary_value) => {
+        const response = await api.post('/product/create', {
+            department, type, service, product, size, unitary_value
+        })
+        return response.data
+    },
+    createCollaborator: async (department_id, collaborator, cpf, mensalista ) => {
+        const response = await api.post('/collaborator/create', {
+            department_id, collaborator, cpf, mensalista 
+        })
+        return response.data
+    },
+
+    findOutputLog: async () => {
+        const response = await api.get('/outputlog')
+        return response.data
+    },
+    findReturn: async () => {
+        const response = await api.get('/return')
+        return response.data
+    },
+    findOutput: async () => {
+        const response = await api.get('/output')
+        return response.data
     }
 
 

@@ -7,10 +7,16 @@ module.exports = {
         const inputs = await Output.findAll({
             include: [
                 {
-                    association: "product"
+                    association: "product",
+                    include: [
+                        {association: 'department'},
+                        {association: 'type'},
+                        {association: 'service'}
+                    ]
                 },
                 {
-                    association: "responsible"
+                    association: "responsible",
+                    include: 'department'
                 }
             ]
         })

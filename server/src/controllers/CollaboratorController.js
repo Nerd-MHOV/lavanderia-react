@@ -51,7 +51,7 @@ module.exports = {
             })
         }
 
-        const [ createCollaborator ] = await Collaborator.findOrCreate({
+        const [ createCollaborator, created ] = await Collaborator.findOrCreate({
             defaults: {
                 department_id,
                 collaborator,
@@ -62,9 +62,41 @@ module.exports = {
             where: {
                 cpf
             }
+        }).then((createCollaborator, ) => {
+            if(!createCollaborator[1]) {
+                return res.json({
+                    message: {
+                        message: createCollaborator[0].collaborator + " já tem cadastro",
+                        type: "alert"
+                    },
+                    debug: {
+                        createCollaborator,
+                    }
+                })
+            }
+
+
+            return res.json({
+                message: {
+                    message: createCollaborator[0].collaborator + " agora faz parte da equipe!",
+                    type: "success"
+                },
+                debug: {
+                    createCollaborator
+                }
+            })
+        }).catch((err) => {
+            return res.json({
+                message: {
+                    message: "Erro, tente novamente",
+                    type: "error"
+                },
+                debug: {
+                    err
+                }
+            })
         })
 
-        return res.json(createCollaborator)
     },
 
     async department(req, res) {

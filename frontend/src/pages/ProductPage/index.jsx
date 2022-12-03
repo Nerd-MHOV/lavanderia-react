@@ -59,7 +59,6 @@ export const ProductPage = () => {
             }
         })
 
-        console.log("ARRLINES", arrLines)
         setRowsProducts(arrLines);
     }
 

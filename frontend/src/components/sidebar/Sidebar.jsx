@@ -38,7 +38,7 @@ const Sidebar = () => {
                                 <span className="title">Controle Lavanderia</span>
                             </Link>
                         </li>
-                        <li className={(pathname === "/painel") ? "hovered" : ""} >
+                        <li className={(pathname === "/painel" || pathname.startsWith('/painel/home')) ? "hovered" : ""} >
                             <Link to="/painel" className="link" >
                                 <span className="icon"><Dashboard /></span>
                                 <span className="title">Home</span>

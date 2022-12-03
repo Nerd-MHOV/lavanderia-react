@@ -12,6 +12,8 @@ import { useApi } from "../../hooks/api"
 import './style.scss'
 import { useFakeMutation, computeMutation } from "./funcMutation"
 import { makeLines, makeOptionsDepartments } from "./tableContent"
+import { NewDepartment } from "../../components/NewDepartment/NewDepartment"
+import { NewCollaborator } from "../../components/NewCollaborator/NewCollaborator"
 
 
 export const CollaboratorsPage = () => {
@@ -23,7 +25,9 @@ export const CollaboratorsPage = () => {
     const [paramsFinger, setParamsFinger] = useState([])
     const [optionsDepartments, setOptionsDepartments] = useState([])
     const [isVisibleModal, setIsVisibleModal] = useState(false)
+    const [isVisibleNewModal, setIsVisibleNewModal] = useState(false)
     const [isModalFingerprint, setIsModalFingerprint] = useState(false)
+    const [isModalNewDepartment, setIsModalNewDepartment] = useState(false)
 
     const mutateRow = useFakeMutation();
     const noButtonRef = useRef(null);
@@ -36,7 +40,7 @@ export const CollaboratorsPage = () => {
     useEffect(() => {
         getCollaborators();
         getDepatments();
-    }, [isVisibleModal])
+    }, [isVisibleModal, isVisibleNewModal])
 
     const columns = [
         { field: 'name', headerName: 'Nome', width: 400, editable: true },
@@ -194,6 +198,16 @@ export const CollaboratorsPage = () => {
         );
     };
 
+    async function handleNewDepartment() {
+        setIsVisibleNewModal(true)
+        setIsModalNewDepartment(true)
+    };
+
+    async function handleNewCollaborator() {
+        setIsVisibleNewModal(true)
+        setIsModalNewDepartment(false)
+    };
+
     return (
         <div className="collaborators_page">
             <Sidebar />
@@ -210,6 +224,17 @@ export const CollaboratorsPage = () => {
                         }
                     </ModalFingerPrint>
 
+                }
+
+                {
+                    isVisibleNewModal &&
+                    <ModalFingerPrint onClose={() => setIsVisibleNewModal(false)}>
+                        {
+                            isModalNewDepartment 
+                            ? <NewDepartment />
+                            : <NewCollaborator />
+                        }
+                    </ModalFingerPrint>
                 }
 
 
@@ -237,8 +262,8 @@ export const CollaboratorsPage = () => {
                         </div>
 
                         <div className="buttons">
-                            <Btn color={'dashboard'} action={"Novo Departamento"} onClick={() => { }} />
-                            <Btn color={'dashboard'} action={"Novo Colaborador"} onClick={() => { }} />
+                            <Btn color={'dashboard'} action={"Novo Departamento"} onClick={handleNewDepartment} />
+                            <Btn color={'dashboard'} action={"Novo Colaborador"} onClick={handleNewCollaborator} />
                         </div>
                     </div>
                 </div>

@@ -11,11 +11,43 @@ module.exports = {
     async store(req, res) {
         const { department } = req.body
 
-        const [ createDepartment ] = await Department.findOrCreate({
+        await Department.findOrCreate({
             defaults: { department },
             where: { department }
+        }).then((createDepartment) => {
+
+            if(!createDepartment[1]){
+                return res.json({
+                    message:{
+                        type: "alert",
+                        message: "Esse departamento já existe!"
+                    },
+                    debug: {
+                        department: createDepartment
+                    }
+                })
+            }
+            return res.json({
+                message:{
+                    type: "success",
+                    message: "Novo departamento adicionado!"
+                },
+                debug: {
+                    department: createDepartment
+                }
+            })
+
+        }).catch((err) => {
+            return res.json({
+                message:{
+                    type: "error",
+                    message: "Houve um erro tente novamente"
+                },
+                debug: {
+                    error: err
+                }
+            })
         })
 
-        return res.json(createDepartment)
     }
 }

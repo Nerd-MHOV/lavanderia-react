@@ -11,6 +11,7 @@ const InputController = require('./controllers/InputController');
 const OutputController = require('./controllers/OutputController');
 const ReturnController = require('./controllers/ReturnController');
 const ConfigDbController = require('./controllers/ConfigDbController');
+const OutputLogController = require('./controllers/OutputLogController');
 
 routes.get('/user', UserController.index);
 routes.post('/user/create', UserController.store);
@@ -25,8 +26,8 @@ routes.get('/departmenthead', DepartmentHeadController.index);
 routes.post('/departmenthead/create', DepartmentHeadController.store);
 
 routes.get('/collaborator', CollaboratorController.index);
-routes.get('/collaborator/debit', CollaboratorController.debit)
 routes.post('/collaborator/create', CollaboratorController.store)
+routes.get('/collaborator/debit', CollaboratorController.debit)
 routes.get('/collaborator/retreat/:id', CollaboratorController.pendentRetreats)
 routes.post('/collaborator/update', CollaboratorController.update)
 routes.get('/collaborator/:id', CollaboratorController.indexPk);
@@ -54,6 +55,8 @@ routes.post('/output/update', OutputController.update);
 routes.delete('/output/:id', OutputController.delete);
 routes.post('/output/retreat', OutputController.retreat);
 routes.post('/output/retreatfinger', OutputController.retreatFinger);
+
+routes.get('/outputlog', OutputLogController.index);
 
 routes.get('/return', ReturnController.index);
 routes.post('/return', ReturnController.store);

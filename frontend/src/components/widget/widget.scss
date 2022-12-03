@@ -1,4 +1,5 @@
 .widget{
+    cursor: pointer;
     display: flex;
     flex: 1;
     padding: 10px;
@@ -37,7 +38,7 @@
             }
         }
         .icon{
-            font-size: 18px;
+            font-size: 30px;
             padding: 5px;
             border-radius: 5px;
             align-self: flex-end;

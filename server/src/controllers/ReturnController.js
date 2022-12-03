@@ -4,7 +4,26 @@ const Return = require("../models/Return");
 
 module.exports = {
     async index(req, res) {
-        const inputs = await Return.findAll()
+        const inputs = await Return.findAll({
+            include: [
+                {
+                    association: "product",
+                    include: [
+                        {association: 'department'},
+                        {association: 'type'},
+                        {association: 'service'}
+                    ]
+                },
+                {
+                    association: 'responsible_in',
+                    include: 'department'
+                },
+                {
+                    association: 'responsible_out',
+                    include: 'department'
+                }
+            ]
+        })
         return res.json(inputs)
     },
 
